@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div>   
         <UserHeader />
         <UserTable v-if="users.length > 0" v-bind:users="users"/>
         <p v-else>Não possui usuários cadastrados</p>

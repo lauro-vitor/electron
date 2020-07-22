@@ -1,5 +1,5 @@
 <template>
-    <button>{{title}}</button>
+    <button v-on:click="$emit('click',$event.target.value)">{{title}}</button>
 </template>
 <script>
 export default {

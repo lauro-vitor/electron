@@ -1,9 +1,11 @@
 'use strict'
-
+import express from 'express'
 import { app, protocol, BrowserWindow } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
+
 // import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 const isDevelopment = process.env.NODE_ENV !== 'production'
+const appExpress = express();
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -94,3 +96,10 @@ if (isDevelopment) {
     })
   }
 }
+appExpress.use(express.json());
+appExpress.use(express.urlencoded({extended: true}));
+require('../backend/routes/')(appExpress);
+
+appExpress.listen(3000, () => {
+  console.log('tudo certo!');
+});

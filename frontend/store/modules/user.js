@@ -1,5 +1,4 @@
-
-
+import mutations from '../mutations'
 const moduleUser = {    
 
    state: () => ({
@@ -16,11 +15,38 @@ const moduleUser = {
                 email:  payload.user.email
             }
             state.users = [... state.users, newUser];
+        },
+        DESTROY_USER(state, payload){
+            return new Promise((resolve, reject) => {
+                let index = state.users.indexOf(
+                    state.users.find(user => user.id == payload.id)
+                );
+                if(index >= 0) {
+                    state.users.splice(index, 1);
+                    resolve();
+                }else {
+                    reject();
+                }
+            });
         }
        
-    },
+    },  
     actions: {
-        
+        DESTROY_USER({commit}, payload){
+           
+            let {id} = payload;
+            return new Promise((resolve) => {
+                console.log('in actions awaiting promises');
+                console.log(
+                    commit({
+                        type:mutations.DESTROY_USER,
+                        id
+                    })
+                );
+                resolve();
+            });
+                
+        }
     },
     getters:{
         getUsers: state => state.users,
