@@ -1,16 +1,23 @@
 
 
-const moduleUser = {
+const moduleUser = {    
 
    state: () => ({
+       userId:0,
        users:[]
    }),
     mutations: {
-        ADD_USER (state, payload) {
-            console.log('here in mutations of users', payload);
-            state.users = [... state.users, payload.user];
-            console.log(state.users);
+        ADD_USER(state, payload) {
+            state.userId ++;
+            let newUser = {
+                id: state.userId,
+                firstName: payload.user.firstName,
+                lastName: payload.user.lastName,
+                email:  payload.user.email
+            }
+            state.users = [... state.users, newUser];
         }
+       
     },
     actions: {
         

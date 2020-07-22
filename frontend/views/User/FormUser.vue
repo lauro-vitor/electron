@@ -15,7 +15,7 @@ export default {
     data: () => ({
         firstName:'',
         lastName: '',
-        email: '',
+        email: '',  
     }),
     components:{
         TextInput,
@@ -35,7 +35,7 @@ export default {
                 type: 'ADD_USER',
                 user,
             });
-            console.log('ok', this);
+
             this.clearForm();
         },
         clearForm: function() {
