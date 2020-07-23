@@ -2,7 +2,7 @@
     <div>
         <div id="container">
             <h2>Lista de Usuários</h2>
-            <RouterLinkButton link="/users/form" title="Adicionar novo usuário"/>     
+            <RouterLinkButton link="/users/register" title="Adicionar novo usuário"/>     
         </div>
     </div>
 </template>

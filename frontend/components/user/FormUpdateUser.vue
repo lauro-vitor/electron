@@ -4,23 +4,18 @@
             v-model="firstName" 
             placeholder="Primeiro Nome" 
             v-bind:onkeydown="validateFirstNameOnKeyDownLocal()"/>
-            
         <MessageError v-bind:message="messageFirstName" />
-
         <TextInput 
             v-model="lastName"
             placeholder="Sobrenome"
             v-bind:onkeydown="validationLastNameOnKeyDownLocal()"/>
-
          <MessageError v-bind:message="messageLastName" />
-
         <TextInput 
             v-model="email" 
             placeholder="email@exemplo.com"
-              v-bind:onkeydown="validationEmailOnKeyDownLocal()"
+            v-bind:onkeydown="validationEmailOnKeyDownLocal()"
             />
-
-         <MessageError v-bind:message="messageEmail" />
+        <MessageError v-bind:message="messageEmail" />
         <SubmitButton title="Salvar"/>
     </form>
 </template>
@@ -33,16 +28,22 @@ import validateFirstNameOnKeyDown from '../../validators/user/validateFirstNameO
 import validateLastNameOnKeyDown from '../../validators/user/validateLastNameOnKeyDown'
 import validateEmailOnKeyDown from '../../validators/user/validateEmailOnKeyDown'
 import validateFormUser from '../../validators/user/validateFormUser'
-import mutations from '../../store/mutations'
+
+import actions from '../../store/actions'
 
 export default {
+    props:{
+        propsId:String,
+    },
     data: () => ({
+        id: 0,
         firstName:'',
         lastName: '',
         email: '',
         messageFirstName:'',
         messageLastName: '',
         messageEmail: '',
+        userToUpdate: null,
     }),
     components:{
         TextInput,
@@ -62,22 +63,17 @@ export default {
         validateForm: function (){
            return validateFormUser(this);
         },
-        submitForm:function(){
+        submitForm:  async function(){
             if(this.validateForm()) {
-                    let firstName = this.firstName;
-                    let lastName = this.lastName;
-                    let email = this.email;
                     let user = {
-                        firstName,
-                        lastName,
-                        email
+                        id: this.id,
+                        firstName: this.firstName,
+                        lastName: this.lastName,
+                        email: this.email
                     }
-                this.$store.commit({
-                    type: mutations.ADD_USER,
-                    user,
-                });
-                alert('Usuário cadastrado com sucesso!');
-                this.clearForm();
+                    await this.dispatchUpdateUser(user);
+                    this.clearForm();
+                    this.$router.push('/users');
             }
             
         },
@@ -85,7 +81,29 @@ export default {
             this.firstName = '';
             this.lastName = '';
             this.email = '';
-        }
+        },
+        dispatchUpdateUser: async function(user) {
+            try {
+                await this.$store.dispatch({
+                    type: actions.UPDATE_USER,
+                    user
+                });
+                alert('Usuário alterado com sucesso!');
+            } catch (error) {
+                alert(error)
+            } 
+        },
+        mountFormUser: function () {
+            this.firstName =   this.userToUpdate.firstName;
+            this.lastName =  this.userToUpdate.firstName;
+            this.email =  this.userToUpdate.email;
+        },
+       
+    },
+    created: function () {
+        this.id = parseInt(this._props.propsId,10);
+        this.userToUpdate = this.$store.getters.getUserById(this.id);
+        this.mountFormUser();
     }
 }
 </script>

@@ -21,5 +21,6 @@ export default {
         margin: 20px 0;
         width: 95%;
         font-size: 1.2em;
+        border: 1px solid #c2c2c2;
     }
 </style>

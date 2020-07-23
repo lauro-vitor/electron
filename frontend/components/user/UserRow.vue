@@ -3,41 +3,47 @@
         <td>{{user.id}}</td>
         <td> {{user.firstName}} {{user.lastName}} </td>
         <td> {{user.email}} </td>
-        <td>
-            <ButtonOptions title="Alterar" />
-            <ButtonOptions title="Excluir" v-on:click="destroyUser(user.id)"/>
+        <td> 
+            <RouterLinkButton v-bind:link="route" title="Alterar"/>
+            <ButtonDestroy title="Excluir" v-on:click="dispatchDestroyUser()"/>
         </td>
     </tr>
 </template>
 <script>
-import ButtonOptions from './ButtonOptions'
+import ButtonDestroy from './ButtonDestroy'
+import RouterLinkButton from '../utils/RouterLinkButton'
 import store from '../../store/index'
 import actions from '../../store/actions';
 
 export default {
+    data: () => ({
+        route: '',
+    }),
     components:{
-        ButtonOptions,
+        ButtonDestroy,
+        RouterLinkButton,
     },
     props:{
         user:Object,
     },
     methods:{
-        destroyUser:  id => {
-           
-            console.log(
-                 store.dispatch({
-                    type: actions.DESTROY_USER,
-                    id,
-                }).then(() => {
-                    alert('Usuário foi removido com sucesso!');
-                })
-                .catch(() => {
-                    alert('não foi possível remover usuário!');
-                })
-            );
-           
-           
-        }
+      setRoute: function(id){
+          this.route = `/users/update/${id}`
+      },
+      dispatchDestroyUser: async function (){
+          try {
+              await store.dispatch({
+                  type:actions.DESTROY_USER,
+                  id:this._props.user.id
+              });
+              alert('Usuário removido com sucesso!');
+          } catch (error) {
+              alert(error);
+          }
+      }
+    },
+    created: function() {
+        this.setRoute(this._props.user.id);
     }
 }
 </script>

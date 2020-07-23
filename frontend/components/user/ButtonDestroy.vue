@@ -1,18 +1,18 @@
 <template>
-    <router-link v-bind:to="link">{{title}}</router-link>   
+    <button  v-on:click="$emit('click',$event.target.value)">{{title}}</button>
 </template>
 <script>
 export default {
     props:{
-        link:String,
         title:String,
+        path:String,
     }
 }
 </script>
 <style scoped>
-   a {  
+   button {  
 
-        margin: auto 0 auto 20px;
+        margin: auto 0 auto 10px;
         background-color: #ebebeb;
         color: black;
         border: 0px;
@@ -21,7 +21,7 @@ export default {
         text-decoration:none;
         border-radius: 5px;
     }
-    a:hover{
+    button:hover{
         background-color: #dedede;
     }
 </style>
