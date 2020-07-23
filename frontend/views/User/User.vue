@@ -1,13 +1,21 @@
 <template>
     <div>   
         <UserHeader />
-        <UserTable v-if="users.length > 0" v-bind:users="users"/>
-        <p v-else>Não possui usuários cadastrados</p>
+        <UserTable v-if="!progress" v-bind:users="users" />
+        <div v-else-if="contains" id="progressContainter">
+            <v-progress-circular
+            indeterminate :size="70" 
+            :width="7" 
+            color="black">
+            </v-progress-circular>
+        </div>
+        <p v-else>Ainda Não possui usuários cadastrados</p>
     </div>
 </template>
 <script>
 import UserHeader from '../../components/user/UserHeader'
 import UserTable from '../../components/user/UserTable'
+import actions from '../../store/actions';
 
 export default {
     components:{
@@ -16,13 +24,33 @@ export default {
     },
     data: () => ({
         users: [],
+        progress: true ,
+        contains: true,
     }),
 
-   created : function() {
-       let {getUsers} = this.$store.getters;
-       if(getUsers.length > 0) {
-           this.users = getUsers
+   beforeCreate : async function() {
+       try {
+            await this.$store.dispatch({
+                type:actions.GET_ALL_USERS
+            });
+            let {getUsers} = this.$store.getters;
+            if(getUsers.length > 0) {
+                this.users = getUsers;
+                this.progress = false;
+            }else {
+                this.contains = false;
+            }
+
+       } catch (error) {
+           alert(error);
        }
+      
    }
 }
 </script>
+<style scoped>
+    #progressContainter{
+        text-align: center;
+        margin-top: 50px;
+    }
+</style>

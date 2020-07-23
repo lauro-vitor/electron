@@ -1,4 +1,6 @@
 import mutations from '../mutations'
+import axios from 'axios'
+
 const moduleUser = {    
 
    state: () => ({
@@ -6,6 +8,9 @@ const moduleUser = {
        users:[]
    }),
     mutations: {
+        GET_ALL_USERS (state, payload) {
+            state.users = [...payload.data.users]
+        },
         ADD_USER(state, payload) {
             state.userId ++;
             let newUser = {
@@ -32,6 +37,25 @@ const moduleUser = {
        
     },  
     actions: {
+        GET_ALL_USERS({commit}){
+            return new Promise((resolve, reject) => {
+                axios.get('http://localhost:3000/api/users')
+                    .then(response => {
+                        if(!response.error) {
+                            let responseData = response.data;
+                            let {data} = responseData;
+                            commit({
+                                type:mutations.GET_ALL_USERS,
+                                data,
+                            });
+                            resolve()
+                        }
+                    })
+                    .catch(error => {
+                        reject(error);
+                    });
+            });
+        },
         DESTROY_USER({commit}, payload){
            
             let {id} = payload;

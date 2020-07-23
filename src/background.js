@@ -2,7 +2,7 @@
 import express from 'express'
 import { app, protocol, BrowserWindow } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
-
+import cors from 'cors';
 // import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 const isDevelopment = process.env.NODE_ENV !== 'production'
 const appExpress = express();
@@ -96,6 +96,7 @@ if (isDevelopment) {
     })
   }
 }
+appExpress.use(cors());
 appExpress.use(express.json());
 appExpress.use(express.urlencoded({extended: true}));
 require('../backend/routes/')(appExpress);
