@@ -1,5 +1,5 @@
 module.exports = row => {
-    return person = {
+    return {
         id: row.id,
         name: row.name,
         isBetaMember: ( row.isBetaMember == 1) ? true: false,
@@ -10,6 +10,7 @@ module.exports = row => {
             id: row.userId,
             firstName: row.firstName,
             lastName: row.lastName,
+            email: row.email,
             createdAt: row.uCreatedAt,
             updatedAt: row.uUpdatedAt,
         }

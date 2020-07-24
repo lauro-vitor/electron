@@ -2,7 +2,7 @@
     <div>
         <NavItem name="Home" link="/"/>
         <NavItem name="Usuários" link="/users" />
-        <NavItem name="Pessoas" link="/persons" />
+        <NavItem name="Membros" link="/persons" />
     </div>
 </template>
 <script>

@@ -1,5 +1,5 @@
 <template>
-    <button  v-on:click="$emit('click',$event.target.value)">{{title}}</button>
+    <button  v-on:click="$emit('click',$event.target.value)">Excluir</button>
 </template>
 <script>
 export default {

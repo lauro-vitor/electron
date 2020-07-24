@@ -5,12 +5,12 @@
         <td> {{user.email}} </td>
         <td> 
             <RouterLinkButton v-bind:link="route" title="Alterar"/>
-            <ButtonDestroy title="Excluir" v-on:click="dispatchDestroyUser()"/>
+            <ButtonDestroy v-on:click="dispatchDestroyUser()"/>
         </td>
     </tr>
 </template>
 <script>
-import ButtonDestroy from './ButtonDestroy'
+import ButtonDestroy from '../utils/ButtonDestroy'
 import RouterLinkButton from '../utils/RouterLinkButton'
 import store from '../../store/index'
 import actions from '../../store/actions';

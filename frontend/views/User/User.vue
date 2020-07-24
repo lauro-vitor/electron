@@ -1,6 +1,10 @@
-<template>
+<template>  
     <div>   
-        <UserHeader />
+        <Header 
+            title="Lista de Usuários"
+            path="/users/register"
+            titleButton="Adicionar Usuário"
+        />
         <UserTable v-if="!progress" v-bind:users="users" />
         <div v-else-if="contains" id="progressContainter">
             <v-progress-circular
@@ -13,13 +17,13 @@
     </div>
 </template>
 <script>
-import UserHeader from '../../components/user/UserHeader'
+import Header from '../../components/utils/Header'
 import UserTable from '../../components/user/UserTable'
 import actions from '../../store/actions';
 
 export default {
     components:{
-        UserHeader,
+        Header,
         UserTable,
     },
     data: () => ({
