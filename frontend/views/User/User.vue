@@ -5,7 +5,9 @@
             path="/users/register"
             titleButton="Adicionar Usuário"
         />
-        <UserTable v-if="!progress" v-bind:users="users" />
+        <UserTable  v-bind:users="users" />
+     
+       <!-- <UserTable v-if="!progress" v-bind:users="users" />
         <div v-else-if="contains" id="progressContainter">
             <v-progress-circular
             indeterminate :size="70" 
@@ -13,13 +15,13 @@
             color="black">
             </v-progress-circular>
         </div>
-        <p v-else>Ainda Não possui usuários cadastrados</p>
+        <p v-else>Ainda Não possui usuários cadastrados</p> -->
     </div>
-</template>
+</template> 
 <script>
 import Header from '../../components/utils/Header'
 import UserTable from '../../components/user/UserTable'
-import actions from '../../store/actions';
+//import actions from '../../store/actions';
 
 export default {
     components:{
@@ -32,8 +34,16 @@ export default {
         contains: true,
     }),
 
-   beforeCreate : async function() {
-       try {
+   mounted : async function() {
+        this.users = await this.$store.gettersgetUsers;
+            /*if(getUsers.length > 0) {
+                this.users = getUsers;
+                this.progress = false;
+            }else {
+                this.contains = false;
+            }
+            console.log(getUsers)*/
+       /*try {
             await this.$store.dispatch({
                 type:actions.GET_ALL_USERS
             });
@@ -47,8 +57,8 @@ export default {
 
        } catch (error) {
            alert(error);
-       }
-      
+       }*/
+
    }
 }
 </script>

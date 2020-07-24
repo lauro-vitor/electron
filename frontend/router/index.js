@@ -7,8 +7,9 @@ import Person from '../views/Person/Person'
 import RegisterUser from '../views/User/RegisterUser'
 import UpdateUser from '../views/User/UpdateUser'
 
-//persons
+//persons 
 import RegisterPerson from '../views/Person/RegisterPerson'
+import UpdatePerson from '../views/Person/UpdatePerson'
 
 Vue.use(VueRouter)
   const routesUser = [
@@ -38,7 +39,12 @@ Vue.use(VueRouter)
       path: '/persons/register',
       name: 'RegisterPerson',
       component: RegisterPerson
-    }
+    },
+    {
+      path: '/persons/update/:id',
+      name: 'UpdatePerson',
+      component: UpdatePerson
+    },
   ]
   const routes = [
   {

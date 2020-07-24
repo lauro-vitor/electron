@@ -26,8 +26,6 @@ const create = person => {
 
         let message = '';
 
-        let res = null;
-
         connection.connect();
 
         connection.beginTransaction(error => {
@@ -46,7 +44,7 @@ const create = person => {
 
                 let {data} =  await getPersonById(results.insertId);
             
-                resolve(response(false, data.person, 'Person adicionado com sucesso!'));
+                resolve(response(false, data, 'Person adicionado com sucesso!'));
 
             });
             connection.commit(error => {

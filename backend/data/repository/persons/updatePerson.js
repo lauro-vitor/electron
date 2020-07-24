@@ -26,7 +26,7 @@ const update = (person, id) => {
             person.userId,
             id
         ];
-        
+        let message = '';
         connection.beginTransaction(error => {
             if(error) {
                 return  reject(response(true, null, {...error}));
@@ -42,7 +42,7 @@ const update = (person, id) => {
 
                 if(results.changedRows == 1) {
                     let {data} = await getPersonById(id);
-                    resolve(response(false, data.person, 'Person Alterado com sucessso!'));
+                    resolve(response(false, data, 'Person Alterado com sucessso!'));
                 }
                
             });

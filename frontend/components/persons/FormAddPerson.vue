@@ -1,24 +1,33 @@
 <template>
   <form action v-on:submit.prevent="submitForm()">
-    <TextInput v-model="name" placeholder="Apelido" />
+    <TextInput 
+      v-model="name" placeholder="Apelido"   
+      v-bind:onkeydown="validateNameOnKeyDownLoacal()"
+    />
     <MessageError v-bind:message="messageName" />
-    <label for>Membro:</label>
-    <br />
-    <input type="radio" v-model="isBetaMember" v-bind:value="true" />
-    <label>Sim</label>
-    <span></span>
-    <input type="radio" v-model="isBetaMember" v-bind:value="false" />
-    <label>Não</label>
-   
-    <select v-if="users.length > 0">
-      <option 
-        v-for="user in users" 
-        v-bind:key="user.id" 
-        v-bind:value="user.id">
-        {{user.email}}
-      </option>
+    <TitleInput title="Membro:" />
+    <div class="containerRadioButton">
+      <label class="container">
+        Sim
+        <input type="radio" v-model="isBetaMember" v-bind:value="true" />
+        <span class="checkmark"></span>
+      </label>
+      <label class="container">
+        Não
+        <input type="radio" v-model="isBetaMember" v-bind:value="false" />
+        <span class="checkmark"></span>
+      </label>
+    </div>
+
+    <TitleInput title="Email:" />
+    <select v-model="userId"  size="2">
+      <option
+        v-for="user in this.$store.getters.getUsers"
+        v-bind:key="user.id"
+        v-bind:value="user.id"
+      >{{user.email}}</option>
     </select>
-     <p v-else> Não existem usuários cadastrados!</p>
+
     <SubmitButton title="salvar" />
   </form>
 </template>
@@ -26,35 +35,132 @@
 import TextInput from "../form/TextInput";
 import SubmitButton from "../form/SubmitButton";
 import MessageError from "../form/MessageError";
+import TitleInput from '../form/TitleInput'
+import validateNameOnKeyDown from '../../validators/persons/validateNameOnKeyDown'
+import validateFormPerson from '../../validators/persons/validateFormPerson'
+import actions from '../../store/actions'
+
 export default {
-  data: () => ({
-    name: "",
-    messageName: "",
-    isBetaMember: true,
-    users: [],
-  }),
-  methods: {
-    submitForm: function () {
-      console.log("value of forms");
-      console.log(this.name);
-      console.log(this.isBetaMember);
-    },
-  },
   components: {
     TextInput,
     SubmitButton,
     MessageError,
+    TitleInput
   },
-  beforeCreate: function () {
-    this.users = this.$store.getters.getUsers;
-    console.log(this.)
-    console.log(this.users);
+  data: () => ({
+    name: "",
+    messageName: "",
+    isBetaMember: true,
+    userId:0,
+  }),
+  methods: {
+    validateNameOnKeyDownLoacal: function (){
+      validateNameOnKeyDown(this);
+    },
+    submitForm: async function () {
+      if(validateFormPerson(this)) {
+        let person = {
+          name: this.name,
+          isBetaMember: this.isBetaMember,
+          userId: this.userId,
+        }
+        await this.dispatchPerson(person);
+        this.$router.push('/persons');
+      }
+    },
+    dispatchPerson: async function (person){
+      try {
+        await this.$store.dispatch({
+          type: actions.ADD_PERSON,
+          person
+        });
+        alert('Membro adicionado com sucesso!');
+      } catch (error) {
+        alert('error', error);
+      }
+    }
   },
+  
+
 };
 </script>
 <style scoped>
 form {
   width: 60%;
-  margin: 10px auto 10px auto;
+  margin: 30px auto 10px auto;
+}
+select {
+  width: 100%;
+  font-size: 1.2em;
+  border: 1px solid #c2c2c2;
+  padding: 12px 20px;
+  margin-bottom: 60px;
+}
+.containerRadioButton {
+  margin-bottom: 20px;
+}
+/* Customize the label (the container) */
+.container {
+  display: inline;
+  position: relative;
+  padding-left: 35px;
+  cursor: pointer;
+  font-size: 22px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default radio button */
+.container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom radio button */
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: #eee;
+  border-radius: 50%;
+}
+
+/* On mouse-over, add a grey background color */
+.container:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+/* When the radio button is checked, add a blue background */
+.container input:checked ~ .checkmark {
+  background-color: #2196f3;
+}
+
+/* Create the indicator (the dot/circle - hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the indicator (dot/circle) when checked */
+.container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the indicator (dot/circle) */
+.container .checkmark:after {
+  top: 9px;
+  left: 9px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: white;
 }
 </style>

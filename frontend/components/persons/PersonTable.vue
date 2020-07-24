@@ -1,6 +1,7 @@
 <template>
     <table>
         <thead>
+            <th>Id</th>
             <th>Apelido</th>
             <th>Membro</th>
             <th>email</th>

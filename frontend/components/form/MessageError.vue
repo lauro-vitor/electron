@@ -16,7 +16,7 @@ export default {
 <style scoped>
     p{
         color:red;
-        margin: 10px 0 10px 0;
+        margin: 10px 0 0 0;
     }
     #hidden{
         visibility: hidden;

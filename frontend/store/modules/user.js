@@ -80,7 +80,7 @@ const moduleUser = {
                     .catch(error => {
                         reject(error);
                     });
-            })
+            })  
         },
         UPDATE_USER({ commit }, payload) {
             return new Promise((resolve, reject) => {
