@@ -17,10 +17,9 @@
     </div>
 </template>
 <script>
-import actions from '../../store/actions'
 import Header from '../../components/utils/Header'
 import PersonTable from '../../components/persons/PersonTable'
-
+import {dispatchGetAllPerson} from '../../store/dispatchers/persons/'
 export default {
     data: () => ({
         persons:[],
@@ -32,11 +31,7 @@ export default {
         PersonTable
     },
     beforeCreate: async function (){
-        try {
-            await this.$store.dispatch({type:actions.GET_ALL_PERSON});
-        } catch (error) {
-            alert(error);
-        }
+       await dispatchGetAllPerson();
        let {getAllPersons} = this.$store.getters;
 
        if(getAllPersons.length > 0) {

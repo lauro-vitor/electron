@@ -1,25 +1,32 @@
 <template>
   <div class="home">
-    <p>Home</p>
+    <div class="col col1">
+      <Card title="Usuários" body="Gerencie os usuários" path="/users"/>
+    </div>
+    <div class="col col2" >
+      <Card title="Membros" body="Gerencie os membros" path="/persons"/>
+    </div>
   </div>  
 </template>
 
 <script>
-import actions from '../store/actions'
+import Card from '../components/home/Card'
 export default {
   name: 'Home',
-  beforeCreate: async function(){
-    try {
-      await this.$store.dispatch({
-        type:actions.GET_ALL_USERS
-      });
-      await this.$store.dispatch({
-        type:actions.GET_ALL_PERSON
-      });
-      
-    } catch (error) {
-      alert(error);
-    }
+  components:{
+    Card
   }
 }
 </script>
+<style scoped>
+  .home{
+    height: 100%;
+  }
+ .col{
+   width:40%;
+   margin: 0 10% 0 10%;
+ }
+ .col1{
+   float:right;
+ }
+</style>

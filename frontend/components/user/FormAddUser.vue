@@ -28,8 +28,7 @@ import validateFirstNameOnKeyDown from '../../validators/user/validateFirstNameO
 import validateLastNameOnKeyDown from '../../validators/user/validateLastNameOnKeyDown'
 import validateEmailOnKeyDown from '../../validators/user/validateEmailOnKeyDown'
 import validateFormUser from '../../validators/user/validateFormUser'
-import actions from '../../store/actions'
-
+import {dispatchAddUser} from '../../store/dispatchers/users/'
 export default {
     data: () => ({
         firstName:'',
@@ -65,7 +64,7 @@ export default {
                         lastName:this.lastName,
                         email: this.email
                     }
-                await this.dispatchAddUser(user);
+                await dispatchAddUser(user);
                 this.clearForm();
                 this.$router.push('/users');
             }
@@ -75,17 +74,6 @@ export default {
             this.firstName = '';
             this.lastName = '';
             this.email = '';
-        },
-        dispatchAddUser: async function(user) {
-            try {
-                await this.$store.dispatch({
-                    type: actions.ADD_USER,
-                    user
-                });
-                alert('Usuário cadastrado com sucesso!');
-            } catch (error) {
-                alert(error)
-            } 
         },
     },
 }

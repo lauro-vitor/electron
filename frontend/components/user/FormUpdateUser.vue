@@ -28,8 +28,7 @@ import validateFirstNameOnKeyDown from '../../validators/user/validateFirstNameO
 import validateLastNameOnKeyDown from '../../validators/user/validateLastNameOnKeyDown'
 import validateEmailOnKeyDown from '../../validators/user/validateEmailOnKeyDown'
 import validateFormUser from '../../validators/user/validateFormUser'
-
-import actions from '../../store/actions'
+import {dispatchUpdateUser} from '../../store/dispatchers/users/'
 
 export default {
     props:{
@@ -71,7 +70,7 @@ export default {
                         lastName: this.lastName,
                         email: this.email
                     }
-                    await this.dispatchUpdateUser(user);
+                    await dispatchUpdateUser(user);
                     this.clearForm();
                     this.$router.push('/users');
             }
@@ -81,17 +80,6 @@ export default {
             this.firstName = '';
             this.lastName = '';
             this.email = '';
-        },
-        dispatchUpdateUser: async function(user) {
-            try {
-                await this.$store.dispatch({
-                    type: actions.UPDATE_USER,
-                    user
-                });
-                alert('Usuário alterado com sucesso!');
-            } catch (error) {
-                alert(error)
-            } 
         },
         mountFormUser: function () {
             this.firstName =   this.userToUpdate.firstName;

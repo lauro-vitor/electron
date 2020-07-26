@@ -1,166 +1,78 @@
 <template>
-  <form action v-on:submit.prevent="submitForm()">
-    <TextInput 
-      v-model="name" placeholder="Apelido"   
-      v-bind:onkeydown="validateNameOnKeyDownLoacal()"
-    />
-    <MessageError v-bind:message="messageName" />
-    <TitleInput title="Membro:" />
-    <div class="containerRadioButton">
-      <label class="container">
-        Sim
-        <input type="radio" v-model="isBetaMember" v-bind:value="true" />
-        <span class="checkmark"></span>
-      </label>
-      <label class="container">
-        Não
-        <input type="radio" v-model="isBetaMember" v-bind:value="false" />
-        <span class="checkmark"></span>
-      </label>
-    </div>
-
-    <TitleInput title="Email:" />
-    <select v-model="userId"  size="2">
-      <option
-        v-for="user in this.$store.getters.getUsers"
-        v-bind:key="user.id"
-        v-bind:value="user.id"
-      >{{user.email}}</option>
-    </select>
-
-    <SubmitButton title="salvar" />
-  </form>
+  <div>
+    <form action v-on:submit.prevent="submitForm()" v-if="contains">
+      <TextInput
+        v-model="name"
+        placeholder="Apelido"
+        v-bind:onkeydown="validateNameOnKeyDownLoacal()"
+      />
+      <MessageError v-bind:message="messageName" />
+      <SelectMember v-model="isBetaMember" />
+      <SelectUser v-model="userId" v-bind:users="this.$store.getters.getUsers" />
+      <SubmitButton title="salvar" />
+    </form>
+    <Loading v-bind:contains="contains" v-bind="nonContains" />
+  </div>
 </template>
 <script>
 import TextInput from "../form/TextInput";
 import SubmitButton from "../form/SubmitButton";
 import MessageError from "../form/MessageError";
-import TitleInput from '../form/TitleInput'
-import validateNameOnKeyDown from '../../validators/persons/validateNameOnKeyDown'
-import validateFormPerson from '../../validators/persons/validateFormPerson'
-import actions from '../../store/actions'
-
+import SelectMember from '../form/SelectMember';
+import SelectUser from '../form/SelectUser';
+import validateNameOnKeyDown from "../../validators/persons/validateNameOnKeyDown";
+import validateFormPerson from "../../validators/persons/validateFormPerson";
+import { dispatchAddPerson } from "../../store/dispatchers/persons/";
+import { dispatchGetAllUser } from "../../store/dispatchers/users/";
+import {stringParseBoolean} from '../../utils'
+import Loading from '../../components/utils/Loading'
 export default {
   components: {
     TextInput,
     SubmitButton,
     MessageError,
-    TitleInput
+    Loading,
+    SelectMember,
+    SelectUser
   },
   data: () => ({
     name: "",
     messageName: "",
     isBetaMember: true,
-    userId:0,
+    userId: 0,
+    contains: false,
+    nonContains: false,
   }),
   methods: {
-    validateNameOnKeyDownLoacal: function (){
+    validateNameOnKeyDownLoacal: function () {
       validateNameOnKeyDown(this);
     },
     submitForm: async function () {
-      if(validateFormPerson(this)) {
+      if (validateFormPerson(this)) {
         let person = {
           name: this.name,
-          isBetaMember: this.isBetaMember,
+          isBetaMember: stringParseBoolean(this.isBetaMember),
           userId: this.userId,
-        }
-        await this.dispatchPerson(person);
-        this.$router.push('/persons');
+        };
+        await dispatchAddPerson(person);
+        this.$router.push("/persons");
       }
     },
-    dispatchPerson: async function (person){
-      try {
-        await this.$store.dispatch({
-          type: actions.ADD_PERSON,
-          person
-        });
-        alert('Membro adicionado com sucesso!');
-      } catch (error) {
-        alert('error', error);
-      }
-    }
   },
-  
-
+  beforeCreate: async function () {
+    await dispatchGetAllUser();
+    if(this.$store.getters.getUsers.length > 0){
+      this.contains = true;
+      return;
+    }
+    this.nonContains = true;
+  },
 };
 </script>
 <style scoped>
+
 form {
   width: 60%;
   margin: 30px auto 10px auto;
-}
-select {
-  width: 100%;
-  font-size: 1.2em;
-  border: 1px solid #c2c2c2;
-  padding: 12px 20px;
-  margin-bottom: 60px;
-}
-.containerRadioButton {
-  margin-bottom: 20px;
-}
-/* Customize the label (the container) */
-.container {
-  display: inline;
-  position: relative;
-  padding-left: 35px;
-  cursor: pointer;
-  font-size: 22px;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-
-/* Hide the browser's default radio button */
-.container input {
-  position: absolute;
-  opacity: 0;
-  cursor: pointer;
-  height: 0;
-  width: 0;
-}
-
-/* Create a custom radio button */
-.checkmark {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 25px;
-  width: 25px;
-  background-color: #eee;
-  border-radius: 50%;
-}
-
-/* On mouse-over, add a grey background color */
-.container:hover input ~ .checkmark {
-  background-color: #ccc;
-}
-
-/* When the radio button is checked, add a blue background */
-.container input:checked ~ .checkmark {
-  background-color: #2196f3;
-}
-
-/* Create the indicator (the dot/circle - hidden when not checked) */
-.checkmark:after {
-  content: "";
-  position: absolute;
-  display: none;
-}
-
-/* Show the indicator (dot/circle) when checked */
-.container input:checked ~ .checkmark:after {
-  display: block;
-}
-
-/* Style the indicator (dot/circle) */
-.container .checkmark:after {
-  top: 9px;
-  left: 9px;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: white;
 }
 </style>
