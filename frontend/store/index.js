@@ -1,13 +1,15 @@
 import Vuex from 'vuex';
+import Vue from 'vue';
 import ModulesUser from './modules/user';
 import ModulePerson from './modules/person';
-import Vue from 'vue';
+import createCache from 'vuex-cache'
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
+    plugins:[createCache()],
     modules:{
         users: ModulesUser,
-        persons: ModulePerson,
+        persons: ModulePerson
     }
 });
 

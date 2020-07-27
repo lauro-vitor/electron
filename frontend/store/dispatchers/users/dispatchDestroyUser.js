@@ -3,7 +3,7 @@ import actions from '../../actions'
 import store from '../../index'
 export default  async function(id){
     try {
-        await store.dispatch({
+        await store.cache.dispatch({
             type:actions.DESTROY_USER,
             id:id,
         });

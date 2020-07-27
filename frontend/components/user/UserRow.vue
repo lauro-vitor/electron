@@ -32,7 +32,7 @@ export default {
       remove: async function (id) {
         await dispatchDestroyUser(id);
       }
-    },
+    },  
     created: function() {
         this.setRoute(this._props.user.id);
     },

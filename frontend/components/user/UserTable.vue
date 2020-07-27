@@ -13,7 +13,6 @@
                 v-for="user in users" 
                 v-bind:key="user.id"
                 v-bind:user="user" />
-              
         </tbody>
     </table>
 </template>

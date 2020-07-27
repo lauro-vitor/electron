@@ -3,7 +3,7 @@ import store from '../../index'
 
 export default async function (person) {
     try {
-        await store.dispatch({
+        await store.cache.dispatch({
             type: actions.ADD_PERSON,
             person
         });

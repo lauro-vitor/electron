@@ -1,34 +1,29 @@
 <template>
-    <div>
+    <div>   
         <Header 
             title="Lista de Membros"
             path="/persons/register"
             titleButton="Adicionar Membro"
         />
-        <PersonTable v-if="!progress" v-bind:persons="persons"/>
-        <div v-else-if="contains">
-            <v-progress-circular
-                indeterminate :size="70" 
-                :width="7" 
-                color="black">
-            </v-progress-circular>
-        </div>
-        <p v-else>Não possui membros cadastrados!</p>
+        <PersonTable v-if="contains" v-bind:persons="persons"/>
+        <Loading v-bind:contains="contains" v-bind="nonContains"/>
     </div>
 </template>
 <script>
 import Header from '../../components/utils/Header'
 import PersonTable from '../../components/persons/PersonTable'
 import {dispatchGetAllPerson} from '../../store/dispatchers/persons/'
+import Loading from '../../components/utils/Loading'
 export default {
     data: () => ({
         persons:[],
-        progress: true,
-        contains: true,
+        contains: false,
+        nonContains: false,
     }),
     components: {
         Header,
-        PersonTable
+        PersonTable,
+        Loading
     },
     beforeCreate: async function (){
        await dispatchGetAllPerson();
@@ -36,10 +31,10 @@ export default {
 
        if(getAllPersons.length > 0) {
            this.persons = getAllPersons;
-           this.progress = false;
+           this.contains = true;
            return;
        }
-        this.contains = false;
+        this.nonContains = true;
     }
 }
 </script>

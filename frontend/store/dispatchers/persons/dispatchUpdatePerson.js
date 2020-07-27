@@ -2,7 +2,7 @@ import actions from '../../actions'
 import store from '../../index'
 export default async function (person){
     try {
-      await store.dispatch({
+      await store.cache.dispatch({
         type: actions.UPDATE_PERSON,
         person
       });
